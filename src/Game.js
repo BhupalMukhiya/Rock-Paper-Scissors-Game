@@ -252,7 +252,7 @@ const Game = () => {
             <h1>
               {result.choseValue === result.resultValue
                 ? "YOU WIN!"
-                : "YOU CLOSE!"}{" "}
+                : "YOU LOSE!"}{" "}
             </h1>
           </div>
           <div className="result-button-content">
