@@ -12,13 +12,14 @@ import timerGif from "./timer-gif.gif";
 
 const Game = () => {
   const [selectGame, setSelectGame] = useState(true);
-  const [selectGameType,setSelectGameType] = useState('user-vs-com');
+  const [selectGameType, setSelectGameType] = useState("user-vs-com");
   const [playGame, setPlayGame] = useState(false);
   const [resultGame, setResultGame] = useState(false);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = React.useState({});
   const [comPlayGame, setComPlayGame] = useState(false);
   const [comValue, setComValue] = useState("");
+  const [finalResult, setFinalResult] = React.useState({});
 
   const selectBtnHandler = (event) => {
     setSelectGame(false);
@@ -26,11 +27,11 @@ const Game = () => {
   };
 
   const comVsComBtnHandler = () => {
-    setSelectGameType('com-vs-com');
+    setSelectGameType("com-vs-com");
     let allValue = ["rock", "paper", "scissors"];
     let resultValue = Math.floor(Math.random() * 3);
 
-    setComValue(allValue[resultValue])
+    setComValue(allValue[resultValue]);
     setSelectGame(false);
     setComPlayGame(true);
 
@@ -38,13 +39,13 @@ const Game = () => {
   };
 
   const palyBtnHandler = (event) => {
-    setSelectGameType('user-vs-com');
+    setSelectGameType("user-vs-com");
 
     let choseValue = event.target.getAttribute("value");
     ResultData(choseValue);
   };
 
-  const ResultData = (choseValue) =>{
+  const ResultData = (choseValue) => {
     let allValue = ["rock", "paper", "scissors"];
     let resultValue = Math.floor(Math.random() * 3);
 
@@ -70,17 +71,21 @@ const Game = () => {
       setPlayGame(false);
       setComPlayGame(false);
       setResultGame(true);
+
+      // resultOutput
+      resultOutput(choseValue,allValue[resultValue]);
     }, 5000);
-  }
+
+    
+  };
 
   const tryAgainBtnHandler = (event) => {
-
-    if( selectGameType == 'user-vs-com' ){
+    if (selectGameType == "user-vs-com") {
       setResultGame(false);
       setSelectGame(false);
       setComPlayGame(false);
       setPlayGame(true);
-    }else{
+    } else {
       setResultGame(false);
       setSelectGame(false);
       setPlayGame(false);
@@ -95,6 +100,76 @@ const Game = () => {
     setComPlayGame(false);
     setPlayGame(false);
     setSelectGame(true);
+  };
+
+  const resultOutput = (player,computer) => {
+    let result;
+    
+      let playerText = "Player Win";
+      let computerText = "Computer Win";
+
+      if(  selectGameType == 'com-vs-com'){
+        playerText = "Computer 1 Win";
+        computerText = "Computer 2 Win";
+      }
+
+
+
+
+    if (player === computer) {
+      result = {
+        player: 0,
+        computer: 0,
+        message: "Tie",
+      };
+    } else if (player == "rock") {
+      if (computer == "paper") {
+        result = {
+          player: 0,
+          computer: 1,
+          message: computerText,
+        };
+      } else {
+        result = {
+          player: 1,
+          computer: 0,
+          message: playerText,
+        };
+      }
+    } else if (player == "scissors") {
+      if (computer == "rock") {
+        result = {
+          player: 0,
+          computer: 1,
+          message: computerText,
+        };
+      } else {
+        result = {
+          player: 1,
+          computer: 0,
+          message: playerText,
+        };
+      }
+    } else if (player == "paper") {
+      if (computer == "scissors") {
+        result = {
+          player: 0,
+          computer: 1,
+          message: computerText,
+        };
+      } else {
+        result = {
+          player: 1,
+          computer: 0,
+          message: playerText,
+        };
+      }
+    }
+
+    console.log('resultOutput',result);
+
+    // setFinalResult
+    setFinalResult(result);
   };
 
   return (
@@ -112,10 +187,7 @@ const Game = () => {
               </Button>
             </div>
             <div className="second-button mt-3">
-              <Button
-                color="warning"
-                onClick={(event) => comVsComBtnHandler()}
-              >
+              <Button color="warning" onClick={(event) => comVsComBtnHandler()}>
                 Computer VS Computer
               </Button>
             </div>
@@ -198,13 +270,13 @@ const Game = () => {
             </div>
             <div className="player-content">
               <div className="first-player mt-2">
-                <strong>Computer 1</strong>
+                <strong>Computer 2</strong>
               </div>
               <div className="hr-line">
                 <hr className="sm" />
               </div>
               <div className="second-player mt-2">
-                <strong>Computer 2</strong>
+                <strong>Computer 1</strong>
               </div>
             </div>
             <div className="choose-move">
@@ -227,9 +299,7 @@ const Game = () => {
               ></img>
               <img
                 src={scissors}
-                className={
-                  comValue == "scissors" ? "active" : "disable"
-                }
+                className={comValue == "scissors" ? "active" : "disable"}
                 alt="scissors"
                 width="100"
                 height="50"
@@ -248,12 +318,27 @@ const Game = () => {
             width="100"
             height="60"
           ></img>
-          <div className="result-close-text">
+          <div className="result-close-text" >
             <h1>
-              {result.choseValue === result.resultValue
-                ? "YOU WIN!"
-                : "YOU LOSE!"}{" "}
+              {finalResult.message}
             </h1>
+            <div className="result-close-text" >
+              <table border={1} >
+                <tr>
+                  <th>Candidate</th>
+                  <th>Score</th>
+                </tr>
+                <tr>
+                  <th>{ ( selectGameType == 'com-vs-com') ? "Computer 1" : "Player" }</th>
+                  <th>{finalResult.player}</th>
+                </tr>
+                <tr>
+                  <th>{ ( selectGameType == 'com-vs-com') ? "Computer 2" : "Computer" }</th>
+                  <th>{finalResult.computer}</th>
+                </tr>
+              </table>
+            </div>
+
           </div>
           <div className="result-button-content">
             <div className="game-play-button mt-2">

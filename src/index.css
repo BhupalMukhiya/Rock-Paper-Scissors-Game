@@ -82,3 +82,13 @@ button.btn.btn-warning {
   font-size: large;
   font-weight: 600;
 }
+
+.result-close-text  .result-table{
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-content: center;
+      justify-content: center;
+      align-items: center;
+}
